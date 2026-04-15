@@ -161,8 +161,7 @@ function renderTeacherBlocks(blocks) {
         `;
     }).join('');
 }
-// Функция для генерации красивых звезд рейтинга
-// Функция для генерации звезд рейтинга (в стиле Lucide)
+
 function renderRatingStars(rating) {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 >= 0.5;
@@ -170,7 +169,6 @@ function renderRatingStars(rating) {
 
     let starsHtml = '';
 
-    // Полные звезды
     for (let i = 0; i < fullStars; i++) {
         starsHtml += `
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star star-full" fill-opacity="1">
@@ -179,7 +177,6 @@ function renderRatingStars(rating) {
         `;
     }
 
-    // Половина звезды
     if (hasHalfStar) {
         starsHtml += `
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star star-half" fill-opacity="0.5">
@@ -188,7 +185,6 @@ function renderRatingStars(rating) {
         `;
     }
 
-    // Пустые звезды
     for (let i = 0; i < emptyStars; i++) {
         starsHtml += `
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star star-empty" fill-opacity="0">
@@ -200,13 +196,11 @@ function renderRatingStars(rating) {
     return starsHtml;
 }
 
-// Функция отображения курсов
 function renderCourses(courses) {
     const container = document.getElementById('courses-grid');
     if (!container) return;
 
     container.innerHTML = courses.map(course => {
-        // Получаем URL изображения
         let imageHtml = '';
         if (course.cover_image) {
             let imageUrl = course.cover_image;
@@ -218,22 +212,17 @@ function renderCourses(courses) {
             imageHtml = `<div class="course-cover-placeholder">📚</div>`;
         }
 
-        // Имя автора
         const authorName = course.author_name || course.author_detail?.name || 'Кит Макс';
 
-        // Описание
         const description = course.short_description ||
                            (course.description ? course.description.substring(0, 150) : 'Описание курса');
 
-        // Количество студентов
         const studentsCount = course.total_students || 0;
         const formattedStudents = studentsCount >= 1000 ? (studentsCount / 1000).toFixed(1) + 'k' : studentsCount;
 
-        // Рейтинг
         const rating = course.average_rating || 0;
         const roundedRating = rating.toFixed(1);
 
-        // Звезды рейтинга
         const starsHtml = renderRatingStars(rating);
 
         return `
@@ -243,8 +232,7 @@ function renderCourses(courses) {
                     ${imageHtml}
                 </div>
                 
-                
-                
+               
                 <p class="course-description">${description}</p>
                 
                 <div class="course-meta">
@@ -285,12 +273,10 @@ function renderTestimonials(testimonials) {
     if (!container) return;
 
     container.innerHTML = testimonials.map(testimonial => {
-        // Используем существующую функцию renderRatingStars
         const starsHtml = renderRatingStars(testimonial.rating);
 
         return `
             <div class="testimonial-card">
-                <!-- Сначала автор -->
                 <div class="testimonial-author">
                     <div class="testimonial-avatar">
                         ${testimonial.display_name?.charAt(0) || 'А'}
@@ -301,10 +287,8 @@ function renderTestimonials(testimonials) {
                     </div>
                 </div>
                 
-                <!-- Потом комментарий -->
                 <p class="testimonial-text">${testimonial.content}</p>
                 
-                <!-- Потом рейтинг -->
                 <div class="testimonial-rating">
                     ${starsHtml}
                 </div>
@@ -317,7 +301,6 @@ function renderPricing(plans) {
     if (!container) return;
 
     container.innerHTML = plans.map(plan => {
-        // SVG галочка
         const svgCheck = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px; flex-shrink: 0;"><path d="M20 6L9 17L4 12" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
         return `
@@ -337,7 +320,6 @@ function renderPricing(plans) {
     }).join('');
 }
 
-// Поворот стрелки для select
 document.addEventListener('DOMContentLoaded', function() {
     const selects = document.querySelectorAll('.select-wrapper select');
 
@@ -437,4 +419,14 @@ function showCourseInterest(courseId) {
         messageDiv.className = 'form-message success';
         document.getElementById('register').scrollIntoView({ behavior: 'smooth' });
     }
+}
+
+const mobileBtn = document.getElementById('mobileMenuBtn');
+const navLinks = document.querySelector('.nav-links');
+
+if (mobileBtn) {
+    mobileBtn.addEventListener('click', () => {
+        mobileBtn.classList.toggle('active');
+        navLinks.classList.toggle('active');
+    });
 }

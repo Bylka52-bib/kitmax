@@ -329,7 +329,7 @@ h3 {
 .pricing-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.5rem; /* gap-6 */
+    gap: 24px;
 }
 
 @media (min-width: 768px) {
@@ -338,7 +338,7 @@ h3 {
     .screenshots-grid,
     .testimonials-grid,
     .pricing-grid {
-        grid-template-columns: repeat(2, 1fr); /* md:grid-cols-2 */
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -348,7 +348,7 @@ h3 {
     .screenshots-grid,
     .testimonials-grid,
     .pricing-grid {
-        grid-template-columns: repeat(3, 1fr); /* lg:grid-cols-3 */
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -366,11 +366,11 @@ h3 {
 .course-card,
 .screenshot-card,
 .testimonial-card,
-.pricing-card{
+.pricing-card {
     position: relative;
-    background: #1F2937; /* bg-surface */
-    border: 1px solid #334155; /* border-border */
-    border-radius: 0.75rem; /* rounded-xl */
+    background: #1F2937;
+    border: 1px solid #334155;
+    border-radius: 12px;
     padding: 24px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -379,87 +379,82 @@ h3 {
     height: 100%;
 }
 
-/* Hover эффекты как в примере */
 .card:hover,
 .course-card:hover,
 .screenshot-card:hover,
-.pricing-card:hover{
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); /* hover:shadow-lg */
-    transform: translateY(-4px); /* hover:-translate-y-1 */
+.pricing-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    transform: translateY(-4px);
 }
 
 
-/* Верхняя часть карточки: заголовок + аватар */
 .card-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 1rem; /* mb-4 */
+    margin-bottom: 16px;
 }
 
-/* Заголовок карточки */
 .card-title,
 .course-title {
     font-size: 22px;
-    font-weight: 700; /* font-bold */
-    color: #FFFFFF; /* text-white */
-    line-height: 1.25; /* leading-tight */
-    padding-right: 1rem; /* pr-4 */
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.25;
+    padding-right: 16px;
     transition: color 0.3s ease;
     margin: 0;
 }
 
 
 .card-avatar {
-    width: 4rem; /* w-16 */
-    height: 4rem; /* h-16 */
-    border-radius: 0.75rem; /* rounded-xl */
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
     object-fit: cover;
-    border: 2px solid #111827; /* border-2 border-bg-main */
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
-    flex-shrink: 0; /* shrink-0 */
+    border: 2px solid #111827;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    flex-shrink: 0;
 }
 
-.card-description{
-    color: #94A3B8; /* text-text-secondary */
-    font-size: 0.875rem; /* text-sm */
+.card-description {
+    color: #94A3B8;
+    font-size: 14px;
     line-height: 1.5;
     display: -webkit-box;
-    -webkit-line-clamp: 3; /* line-clamp-3 */
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    flex: 1; /* flex-1 */
+    flex: 1;
 }
 
-.card-footer{
+.card-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 1rem; /* pt-4 */
-    border-top: 1px solid rgba(51, 65, 85, 0.5); /* border-t border-border/50 */
-    margin-top: auto; /* mt-auto */
+    padding-top: 16px;
+    border-top: 1px solid rgba(51, 65, 85, 0.5);
+    margin-top: auto;
 }
 
-/* Автор/мета информация */
 .card-author,
 .course-students {
-    font-size: 0.75rem; /* text-xs */
-    font-weight: 500; /* font-medium */
-    color: #64748B; /* text-text-muted */
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748B;
 }
 
-/* Ссылка "К курсу" - появляется при ховере */
 .card-link,
 .course-btn {
     display: flex;
     align-items: center;
-    gap: 0.5rem; /* gap-2 */
-    font-size: 0.875rem; /* text-sm */
-    font-weight: 700; /* font-bold */
-    color: #F59E0B; /* text-primary-DEFAULT */
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #F59E0B;
     text-decoration: none;
     opacity: 0;
-    transform: translateX(-0.5rem); /* -translate-x-2 */
+    transform: translateX(-8px);
     transition: all 0.3s ease;
 }
 
@@ -484,11 +479,11 @@ h3 {
     align-items: center;
     justify-content: center;
     font-size: 48px;
-    margin-bottom: 1rem;
+    margin-bottom: 16px;
 }
 
 
-.screenshot-image img{
+.screenshot-image img {
     border-radius: 8px;
     border: 2px solid #0F172A;
 }
@@ -505,7 +500,7 @@ h3 {
 
 .testimonial-rating {
     color: #F59E0B;
-    font-size: 1.25rem;
+    font-size: 20px;
 }
 
 .testimonial-text {
@@ -541,24 +536,9 @@ h3 {
 
 .testimonial-role {
     color: #94A3B8;
-    font-size: 0.75rem;
+    font-size: 12px;
 }
 
-
-
-@media (max-width: 768px) {
-    .pricing-card.popular {
-        transform: scale(1);
-    }
-
-    .pricing-card.popular:hover {
-        transform: translateY(-4px);
-    }
-}
-
-/* ========================================
-   КНОПКИ В СТИЛЕ ПРИМЕРА
-   ======================================== */
 
 .btn {
     display: inline-block;
@@ -587,42 +567,12 @@ h3 {
     color: #9CA3AF;
     display: flex;
     align-items: center;
-    gap: 0.375rem;
+    gap: 6px;
 }
 
 .btn-outline:hover {
     color: #2563EB;
 }
-
-/*.btn-large {*/
-/*    font-size: 1.125rem;*/
-/*    padding: 0.6875rem 1.5rem;*/
-/*    border-radius: 0.5rem;*/
-/*    font-weight: 500;*/
-/*    color: #FFFFFF;*/
-/*    box-shadow: 0 0 15px rgba(245, 158, 11, 0.7);*/
-/*}*/
-
-/*.btn-large:hover {*/
-/*    background-color: #F59E0B;*/
-/*    box-shadow: none;*/
-/*    transform: translateY(-2px);*/
-/*}*/
-
-/*.btn-larges {*/
-/*    font-size: 1.125rem;*/
-/*    padding: 0.6875rem 1.5rem;*/
-/*    border-radius: 0.5rem;*/
-/*    font-weight: 500;*/
-/*    color: #FFFFFF;*/
-/*    box-shadow: 0 0 15px rgba(37, 99, 235, 0.7);*/
-/*}*/
-
-/*.btn-larges:hover {*/
-/*    background-color: #2563EB;*/
-/*    box-shadow: none;*/
-/*    transform: translateY(-2px);*/
-/*}*/
 
 .btn-full {
     width: 100%;
@@ -641,13 +591,13 @@ h3 {
     margin-bottom: 24px;
 }
 
-.form-header h2{
+.form-header h2 {
     font-size: 28px;
     font-weight: 600;
     margin-bottom: 8px;
 }
 
-.form-header p{
+.form-header p {
     font-size: 16px;
     font-weight: 400;
 }
@@ -729,7 +679,7 @@ h3 {
     background: #0F172A;
     color: #FFFFFF;
     font-size: 14px;
-    appearance: none; /* Убираем стандартную стрелку */
+    appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     cursor: pointer;
@@ -838,14 +788,11 @@ h3 {
     cursor: pointer;
 }
 
-
-/* Адаптив */
 @media (min-width: 768px) {
     .footer-bottom-new {
         flex-direction: row;
     }
 }
-
 
 
 @media (max-width: 768px) {
@@ -903,6 +850,10 @@ h3 {
     .section {
         padding: 48px 0;
     }
+
+    .header{
+        padding: 10px 0px;
+    }
 }
 
 .course-card {
@@ -952,7 +903,6 @@ h3 {
 
 }
 
-/* Заглушка если нет изображения */
 .course-cover-placeholder {
     width: 64px;
     height: 64px;
@@ -966,24 +916,21 @@ h3 {
     flex-shrink: 0;
 }
 
-/* Нижняя часть */
 .course-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-top: 16px;
     border-top: 1px solid rgba(51, 65, 85, 0.5);
-    margin-top: 0;  /* Убираем margin-top, так как meta уже прижат */
+    margin-top: 0;
 }
 
-/* Автор */
 .course-author {
     color: #64748B;
     font-size: 12px;
     font-weight: 500;
 }
 
-/* Кнопка "К курсу" */
 .course-button {
     display: flex;
     align-items: center;
@@ -1001,14 +948,12 @@ h3 {
     transform: translateX(0);
 }
 
-/* Сетка курсов */
 .courses-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 24px;
 }
 
-/* Адаптив */
 @media (max-width: 768px) {
     .courses-grid {
         grid-template-columns: 1fr;
@@ -1029,13 +974,12 @@ h3 {
     }
 }
 
-/* Мета-информация (студенты + рейтинг) */
 .course-meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 16px;
-    margin-top: auto;  /* КЛЮЧЕВОЕ СВОЙСТВО - прижимает к низу */
+    margin-top: auto;
 }
 
 .course-students {
@@ -1084,7 +1028,6 @@ h3 {
 
 }
 
-/* Звезды рейтинга в стиле Lucide */
 .course-rating {
     display: flex;
     align-items: center;
@@ -1123,15 +1066,12 @@ h3 {
     stroke: #475569;
 }
 
-/* Карточка для преподавателей (сохраняя вашу структуру) */
 .teacher-card {
     position: relative;
     overflow: hidden;
 }
 
 
-
-/* Нижняя часть с кнопкой */
 .teacher-card-footer {
     display: flex;
     justify-content: space-between;
@@ -1139,7 +1079,6 @@ h3 {
     margin-top: 10px;
 }
 
-/* Кнопка "Подробнее" (с эффектом появления как в курсах) */
 .teacher-card-button {
     display: flex;
     align-items: center;
@@ -1181,7 +1120,6 @@ h3 {
     z-index: 1;
 }
 
-/* Название */
 .pricing-name {
     font-size: 20px;
     font-weight: 700;
@@ -1189,7 +1127,6 @@ h3 {
     margin-bottom: 12px;
 }
 
-/* Цена */
 .pricing-price {
     margin-bottom: 20px;
     padding-bottom: 16px;
@@ -1207,7 +1144,6 @@ h3 {
     color: #94A3B8;
 }
 
-/* Список */
 .pricing-features {
     list-style: none;
     margin: 0 0 24px 0;
@@ -1228,7 +1164,6 @@ h3 {
     display: none;
 }
 
-/* Кнопка */
 .pricing-card .btn-pricing {
     width: 100%;
     padding: 12px;
@@ -1244,4 +1179,109 @@ h3 {
 
 .pricing-card .btn-pricing:hover {
     background: #D97706;
+}
+
+.mobile-menu-btn {
+    display: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.mobile-menu-btn span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #FFFFFF;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+    border-radius: 3px;
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-btn {
+        display: block;
+        order: 2;
+    }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(31, 41, 55, 0.95);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        gap: 0;
+        padding: 20px;
+        border-top: 1px solid #334155;
+        z-index: 1000;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links a {
+        padding: 12px 0;
+        font-size: 16px;
+        border-bottom: 1px solid #334155;
+    }
+
+    .nav-links a:last-child {
+        border-bottom: none;
+    }
+
+    .nav-buttons {
+        order: 1;
+        gap: 12px;
+    }
+
+    .logo {
+        order: 0;
+    }
+
+    .mobile-menu-btn.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .mobile-menu-btn.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .mobile-menu-btn.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+    }
+}
+
+@media (max-width: 480px) {
+    .logo img {
+        width: 45px;
+    }
+
+    .nav-buttons {
+        gap: 0px;
+    }
+
+    .nav-buttons .btn-outline,
+    .nav-buttons .btn-primary {
+        padding: 6px;
+    }
+
+    .nav-buttons a{
+        font-size: 12px;
+    }
+
+    .nav-buttons svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .mobile-menu-btn {
+        padding: 6px;
+    }
+
+
 }

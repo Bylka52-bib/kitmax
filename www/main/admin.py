@@ -34,8 +34,8 @@ class CustomUserAdmin(UserAdmin):
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
     list_display = (
-    'title', 'get_author_name', 'platform_course_id', 'total_students', 'average_rating', 'order', 'is_featured',
-    'is_active')
+        'title', 'get_author_name', 'platform_course_id', 'total_students', 'average_rating', 'order', 'is_featured',
+        'is_active')
     list_filter = ('is_featured', 'is_active', 'author')
     search_fields = ('title', 'platform_course_id', 'author__name')
     list_editable = ('order', 'is_featured', 'is_active')

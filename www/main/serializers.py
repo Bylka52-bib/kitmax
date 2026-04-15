@@ -47,7 +47,6 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 
 class BookSerializer(serializers.ModelSerializer):
-    # Вложенный сериализатор для чтения
     author_detail = AuthorSerializer(source='author', read_only=True)
 
     class Meta:
@@ -57,13 +56,11 @@ class BookSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'created_at', 'updated_at')
 
     def validate_title(self, value):
-        """Field-level validation"""
         if len(value) < 2:
             raise serializers.ValidationError("Название книги должно содержать минимум 2 символа")
         return value
 
     def validate_pages(self, value):
-        """Field-level validation for pages"""
         if value <= 0:
             raise serializers.ValidationError("Количество страниц должно быть положительным числом")
         if value > 10000:
@@ -71,8 +68,6 @@ class BookSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
-        """Object-level validation"""
-        # Проверка, что если книга дорогая, то она должна быть активной
         if data.get('price', 0) > 10000 and not data.get('is_active', True):
             raise serializers.ValidationError({
                 "is_active": "Дорогие книги должны быть активными"
@@ -110,14 +105,10 @@ class ScreenshotSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'image', 'section', 'order')
 
 
-
-
-
 class PricingPlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = PricingPlan
         fields = ('id', 'name', 'price', 'price_period', 'features', 'is_popular')
-
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -136,7 +127,6 @@ class CourseSerializer(serializers.ModelSerializer):
 
 
 class TestimonialSerializer(serializers.ModelSerializer):
-    """Сериализатор для отзывов"""
     display_name = serializers.ReadOnlyField()
     course_title = serializers.CharField(source='course.title', read_only=True)
 
@@ -148,8 +138,6 @@ class TestimonialSerializer(serializers.ModelSerializer):
 
 
 class LeadSerializer(serializers.ModelSerializer):
-    """Сериализатор для лидов"""
-
     class Meta:
         model = Lead
         fields = ('id', 'user', 'course', 'name', 'email', 'phone', 'user_type',

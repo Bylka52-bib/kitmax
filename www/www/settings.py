@@ -13,7 +13,6 @@ DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -21,14 +20,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Third party apps
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
     'django_filters',
-
-    # Local app
     'main',
 ]
 
@@ -63,7 +58,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'www.wsgi.application'
 
-# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -71,7 +65,6 @@ DATABASES = {
     }
 }
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -87,27 +80,22 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
 LANGUAGE_CODE = 'ru-ru'
 TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS settings
 CORS_ALLOW_ALL_ORIGINS = True  # Для разработки разрешаем все адреса
 CORS_ALLOW_CREDENTIALS = True
 
-# REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -124,7 +112,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
 }
 
-# JWT settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
@@ -139,21 +126,16 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
 
-# Custom user model
 AUTH_USER_MODEL = 'main.User'
 
 ALLOWED_SVG_MIME_TYPES = ['image/svg+xml', 'image/svg']
-
-# Если используете Pillow для проверки изображений
 
 import mimetypes
 
 mimetypes.add_type('image/svg+xml', '.svg', True)
 mimetypes.add_type('image/svg+xml', '.svgz', True)
-# Для дополнительной безопасности (опционально)
 DATA_UPLOAD_MAX_NUMBER_FILES = 100
 
-# Если используете whitenoise для статики
 WHITENOUSE_MIMETYPES = {
     '.svg': 'image/svg+xml',
 }

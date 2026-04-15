@@ -1,8 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.core.validators import RegexValidator, EmailValidator, FileExtensionValidator
+from django.core.validators import RegexValidator, FileExtensionValidator
 from django.utils.translation import gettext_lazy as _
-
 
 
 class UserManager(BaseUserManager):
@@ -14,6 +13,7 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
+
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
@@ -22,38 +22,20 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
-# ============= ПОЛЬЗОВАТЕЛЬ =============
-
 class User(AbstractUser):
-    """
-    Пользователь системы.
-    Синхронизируется с основной платформой через platform_user_id.
-    """
     username = None
     email = models.EmailField(_('email address'), unique=True)
     phone = models.CharField(max_length=20, blank=True)
-    user_type = models.CharField(
-        max_length=20,
-        choices=[
-            ('student', 'Студент'),
-            ('teacher', 'Преподаватель'),
-            ('admin', 'Администратор'),
-            ('content_manager', 'Контент-менеджер'),
-        ],
-        default='student'
-    )
+    user_type = models.CharField(max_length=20, choices=[
+        ('student', 'Студент'),
+        ('teacher', 'Преподаватель'),
+        ('admin', 'Администратор'),
+        ('content_manager', 'Контент-менеджер'),
+    ], default='student')
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
-
-    # ID пользователя в основной платформе (для синхронизации)
-    platform_user_id = models.IntegerField(
-        null=True,
-        blank=True,
-        verbose_name='ID в основной платформе'
-    )
-
+    platform_user_id = models.IntegerField(null=True, blank=True, verbose_name='ID в основной платформе')
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
-
     objects = UserManager()
 
     class Meta:
@@ -64,51 +46,19 @@ class User(AbstractUser):
         return self.email
 
 
-# ============= КУРС (СИНХРОНИЗАЦИЯ С ОСНОВНОЙ ПЛАТФОРМОЙ) =============
-
 class Course(models.Model):
-    """
-    Модель курса.
-    Данные синхронизируются с основной платформой через API.
-    """
-    # ID курса в основной платформе (ключ для синхронизации)
-    platform_course_id = models.IntegerField(
-        unique=True,
-        verbose_name='ID курса в основной платформе'
-    )
+    platform_course_id = models.IntegerField(unique=True, verbose_name='ID курса в основной платформе')
     title = models.CharField(max_length=255, verbose_name='Название курса')
     description = models.TextField(verbose_name='Описание')
-    short_description = models.CharField(
-        max_length=200,
-        blank=True,
-        verbose_name='Краткое описание для лендинга'
-    )
-    cover_image = models.ImageField(
-        upload_to='courses/',
-        blank=True,
-        null=True,
-        verbose_name='Обложка курса'
-    )
+    short_description = models.CharField(max_length=200, blank=True, verbose_name='Краткое описание для лендинга')
+    cover_image = models.ImageField(upload_to='courses/', blank=True, null=True, verbose_name='Обложка курса')
     preview_video = models.URLField(blank=True, verbose_name='Превью видео')
-
-    # Связь с автором (ForeignKey)
-    author = models.ForeignKey(
-        'Author',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='courses',
-        verbose_name='Автор курса'
-    )
-
-    # Статистика для лендинга (кешируется из основной платформы)
+    author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True, blank=True, related_name='courses', verbose_name='Автор курса')
     total_students = models.PositiveIntegerField(default=0, verbose_name='Всего студентов')
     average_rating = models.FloatField(default=0, verbose_name='Средний рейтинг')
-
     is_featured = models.BooleanField(default=False, verbose_name='Показывать на лендинге')
     order = models.PositiveIntegerField(default=0, verbose_name='Порядок отображения')
     is_active = models.BooleanField(default=True, verbose_name='Активен')
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -121,19 +71,12 @@ class Course(models.Model):
         return self.title
 
     def get_author_name(self):
-        """Возвращает имя автора"""
         if self.author:
             return self.author.name
         return 'Кит Макс'
 
-# ============= ОТЗЫВЫ (СВЯЗЬ С ПОЛЬЗОВАТЕЛЕМ И КУРСОМ) =============
 
 class Testimonial(models.Model):
-    """
-    Отзывы пользователей о курсах.
-    Могут оставлять как зарегистрированные, так и незарегистрированные пользователи.
-    """
-    # Связь с пользователем (если пользователь зарегистрирован)
     user = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -142,16 +85,12 @@ class Testimonial(models.Model):
         related_name='testimonials',
         verbose_name='Пользователь'
     )
-
-    # Связь с курсом (о каком курсе отзыв)
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,
         related_name='testimonials',
         verbose_name='Курс'
     )
-
-    # Данные для незарегистрированных пользователей
     guest_name = models.CharField(
         max_length=100,
         blank=True,
@@ -161,16 +100,12 @@ class Testimonial(models.Model):
         blank=True,
         verbose_name='Email (для гостей)'
     )
-
-    # Содержание отзыва
     content = models.TextField(verbose_name='Текст отзыва')
     rating = models.PositiveSmallIntegerField(
         default=5,
         choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')],
         verbose_name='Рейтинг'
     )
-
-    # Статус отзыва
     is_verified = models.BooleanField(
         default=False,
         verbose_name='Подтвержден (пользователь действительно прошел курс)'
@@ -191,20 +126,12 @@ class Testimonial(models.Model):
 
     @property
     def display_name(self):
-        """Имя для отображения"""
         if self.user:
             return self.user.first_name or self.user.email
         return self.guest_name or "Аноним"
 
 
-# ============= ЛИДЫ/ЗАЯВКИ (СВЯЗЬ С ПОЛЬЗОВАТЕЛЕМ И КУРСОМ) =============
-
 class Lead(models.Model):
-    """
-    Заявка от потенциального клиента.
-    Может быть связана с пользователем (если уже зарегистрирован)
-    и с конкретным курсом (если интересуется конкретным курсом).
-    """
     USER_TYPES = [
         ('student', 'Студент'),
         ('teacher', 'Преподаватель'),
@@ -217,8 +144,6 @@ class Lead(models.Model):
         ('converted', 'Конвертирован в пользователя'),
         ('lost', 'Потерян'),
     ]
-
-    # Связь с пользователем (если уже зарегистрирован)
     user = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -227,8 +152,6 @@ class Lead(models.Model):
         related_name='leads',
         verbose_name='Пользователь'
     )
-
-    # Связь с курсом (какой курс интересует)
     course = models.ForeignKey(
         Course,
         on_delete=models.SET_NULL,
@@ -237,8 +160,6 @@ class Lead(models.Model):
         related_name='leads',
         verbose_name='Интересующий курс'
     )
-
-    # Данные заявки
     name = models.CharField(max_length=100, verbose_name='Имя')
     email = models.EmailField(verbose_name='Email')
     phone = models.CharField(
@@ -257,8 +178,6 @@ class Lead(models.Model):
         verbose_name='Тип пользователя'
     )
     message = models.TextField(blank=True, verbose_name='Сообщение')
-
-    # Статус обработки
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
@@ -279,7 +198,6 @@ class Lead(models.Model):
         return f"{self.name} - {self.email} ({self.get_user_type_display()})"
 
     def save(self, *args, **kwargs):
-        """При сохранении, если указан email, пытаемся найти пользователя"""
         if not self.user and self.email:
             try:
                 self.user = User.objects.get(email=self.email)
@@ -288,10 +206,7 @@ class Lead(models.Model):
         super().save(*args, **kwargs)
 
 
-# ============= СТАТИСТИКА ПЛАТФОРМЫ =============
-
 class PlatformStatistics(models.Model):
-    """Статистика платформы для отображения на лендинге"""
     active_courses = models.PositiveIntegerField(default=0, verbose_name='Активные курсы')
     total_students = models.PositiveIntegerField(default=0, verbose_name='Всего студентов')
     total_teachers = models.PositiveIntegerField(default=0, verbose_name='Всего преподавателей')
@@ -306,10 +221,7 @@ class PlatformStatistics(models.Model):
         return f"Статистика от {self.updated_at}"
 
 
-# ============= HERO БЛОК =============
-
 class HeroBlock(models.Model):
-    """Hero блок на главной странице"""
     title = models.CharField(max_length=200, verbose_name='Заголовок')
     subtitle = models.TextField(verbose_name='Подзаголовок')
     background_image = models.ImageField(upload_to='hero/', blank=True, verbose_name='Фоновое изображение')
@@ -325,10 +237,7 @@ class HeroBlock(models.Model):
         return self.title
 
 
-# ============= БЛОК ДЛЯ СТУДЕНТОВ (СВЯЗЬ С КУРСАМИ) =============
-
 class StudentBlock(models.Model):
-    """Блок "Для студентов" на лендинге. Может показывать конкретные курсы."""
     title = models.CharField(max_length=200, verbose_name='Заголовок')
     description = models.TextField(verbose_name='Описание')
     icon = models.FileField(
@@ -337,8 +246,6 @@ class StudentBlock(models.Model):
         verbose_name='Иконка (PNG, JPG, SVG)',
         validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg', 'svg'])]
     )
-
-    # Связь с курсами (какие курсы показывать в этом блоке)
     featured_courses = models.ManyToManyField(
         Course,
         blank=True,
@@ -358,10 +265,7 @@ class StudentBlock(models.Model):
         return self.title
 
 
-# ============= БЛОК ДЛЯ ПРЕПОДАВАТЕЛЕЙ =============
-
 class TeacherBlock(models.Model):
-    """Блок "Для преподавателей" на лендинге"""
     title = models.CharField(max_length=200, verbose_name='Заголовок')
     description = models.TextField(verbose_name='Описание')
     icon = models.FileField(
@@ -383,14 +287,9 @@ class TeacherBlock(models.Model):
         return self.title
 
 
-# ============= СКРИНШОТЫ (СВЯЗЬ С КУРСАМИ) =============
-
 class Screenshot(models.Model):
-    """Скриншоты для демонстрации. Можно привязывать к конкретным курсам."""
     title = models.CharField(max_length=200, verbose_name='Название')
     image = models.ImageField(upload_to='screenshots/', verbose_name='Скриншот')
-
-    # Связь с курсом (скриншот какого курса)
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,
@@ -421,7 +320,6 @@ class Screenshot(models.Model):
 
 
 class PricingPlan(models.Model):
-    """Тарифные планы"""
     name = models.CharField(max_length=100, verbose_name='Название тарифа')
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена')
     price_period = models.CharField(max_length=20, default='месяц', verbose_name='Период оплаты')
@@ -439,10 +337,7 @@ class PricingPlan(models.Model):
         return self.name
 
 
-# ============= АВТОР (ДЛЯ ПРИМЕРА) =============
-
 class Author(models.Model):
-    """Автор книг (учебный пример для демонстрации ForeignKey)"""
     name = models.CharField(max_length=255, verbose_name='Имя автора')
     bio = models.TextField(blank=True, verbose_name='Биография')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -455,10 +350,7 @@ class Author(models.Model):
         return self.name
 
 
-# ============= КНИГА (ДЛЯ ПРИМЕРА) =============
-
 class Book(models.Model):
-    """Книга (учебный пример для демонстрации ForeignKey)"""
     title = models.CharField(max_length=255, verbose_name='Название книги')
     author = models.ForeignKey(
         Author,
